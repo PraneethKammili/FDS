@@ -52,7 +52,7 @@ const STORY = {
     "Thank you for being part of my story.",
     "No matter where life takes us&hellip;",
     "&hellip;I'll always be grateful that our paths crossed.",
-    "Happy Friendship Day ❤️",
+    "Happy Friendship Dayy Princessssss...💙👸🏻🫂",
   ],
 
   // Secret heart popup (easter egg).
