@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Our Story — A Friendship Day Film</title>
+
+<!--
+  ════════════════════════════════════════════════════════════════════
+  A CINEMATIC FRIENDSHIP STORY — three files, no build step, no libraries.
+    index.html  → structure (this file)
+    styles.css  → THEME + all visual styling
+    script.js   → STORY content + the engine that runs the film
+
+  HOW TO PERSONALIZE THIS GIFT
+    1. Open styles.css  → edit the "THEME" block at the very top.
+    2. Open script.js   → edit the "STORY" object near the top.
+  You should not need to touch anything else in any of the three files.
+  ════════════════════════════════════════════════════════════════════
+-->
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- Ambient layers -->
+<div id="starfield" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="finale-sky" id="finale-sky" aria-hidden="true"></div>
+
+<!-- Story-thread progress (signature element) -->
+<nav id="thread" aria-hidden="true"></nav>
+
+<!-- Skip film intro / accessibility shortcut -->
+<button id="skip-btn" type="button">Skip ahead</button>
+
+<!-- Floating music player -->
+<div id="music-player" class="glass" role="group" aria-label="Background music controls">
+  <button id="music-toggle" type="button" aria-label="Play music">
+    <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
+  <input id="music-volume" type="range" min="0" max="1" step="0.01" value="0.6" aria-label="Volume">
+  <button id="music-mute" type="button" aria-label="Mute">🔊</button>
+</div>
+<audio id="bg-audio" loop preload="none"></audio>
+
+<!-- Secret heart easter egg -->
+<button id="secret-heart" type="button" aria-label="A secret message">♥</button>
+<div class="modal-backdrop" id="secret-modal">
+  <div class="modal-box glass">
+    <p id="secret-message">You'll always have a special place in my heart.</p>
+    <button class="btn" id="secret-close" type="button">Close</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCENE 1 — THE BEGINNING
+     ══════════════════════════════════════════════════════════════ -->
+<section class="scene" id="scene-open" aria-label="Scene 1: The beginning">
+  <p class="scene-eyebrow">A film for you</p>
+  <p class="line" data-line="1">Every friendship has a story&hellip;</p>
+  <p class="line" data-line="2">And this is ours.</p>
+  <button class="btn" id="begin-btn" type="button" style="display:none;">Begin</button>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCENE 2 — THE ENVELOPE
+     ══════════════════════════════════════════════════════════════ -->
+<section class="scene" id="scene-envelope" aria-label="Scene 2: The envelope">
+  <p class="scene-eyebrow">Something arrived for you</p>
+  <div class="envelope-wrap" id="envelope" tabindex="0" role="button" aria-label="Open the envelope">
+    <div class="envelope-body">
+      <div class="letter-inside" aria-hidden="true"></div>
+      <div class="flap"></div>
+      <div class="seal" aria-hidden="true">S</div>
+    </div>
+  </div>
+  <p class="envelope-hint">Tap the envelope to open it</p>
+  <p class="days-counter" id="days-counter"></p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCENE 3 — THE MEMORY JOURNEY
+     ══════════════════════════════════════════════════════════════ -->
+<section class="scene" id="scene-memories" aria-label="Scene 3: The memory journey">
+  <p class="scene-eyebrow">A few of my favorite moments with you</p>
+  <div class="memory-stage" id="memory-stage"></div>
+  <div class="memory-controls">
+    <button class="arrow-btn" id="memory-prev" type="button" aria-label="Previous memory">&#8592;</button>
+    <button class="btn ghost" id="memory-next" type="button" style="margin-top:0;">Next Memory</button>
+    <button class="arrow-btn" id="memory-forward" type="button" aria-label="Next memory">&#8594;</button>
+  </div>
+  <div class="memory-dots" id="memory-dots"></div>
+  <p class="swipe-hint">Swipe to browse</p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCENE 4 — OUR LITTLE MOMENTS
+     ══════════════════════════════════════════════════════════════ -->
+<section class="scene" id="scene-notes" aria-label="Scene 4: Our little moments">
+  <p class="scene-eyebrow">Our little moments</p>
+  <div class="notes-field" id="notes-field"></div>
+  <button class="btn" id="notes-continue" type="button" style="display:none;">Continue</button>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCENE 5 — THINGS I APPRECIATE ABOUT YOU
+     ══════════════════════════════════════════════════════════════ -->
+<section class="scene" id="scene-appreciate" aria-label="Scene 5: Things I appreciate about you">
+  <p class="scene-eyebrow">Things I appreciate about you</p>
+  <div class="appreciation-grid" id="appreciation-grid"></div>
+  <button class="btn" id="appreciate-continue" type="button" style="display:none;">Continue</button>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCENE 6 — HOW WELL DO YOU KNOW US
+     ══════════════════════════════════════════════════════════════ -->
+<section class="scene" id="scene-quiz" aria-label="Scene 6: A little quiz">
+  <p class="scene-eyebrow">Just for fun</p>
+  <div class="quiz-card glass" id="quiz-card">
+    <p class="quiz-question" id="quiz-question"></p>
+    <div class="quiz-options" id="quiz-options"></div>
+    <p class="quiz-feedback" id="quiz-feedback"></p>
+  </div>
+  <button class="btn ghost" id="quiz-next" type="button" style="display:none;">Next</button>
+  <div class="memory-dots" id="quiz-dots"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCENE 7 — HEARTFELT LETTER
+     ══════════════════════════════════════════════════════════════ -->
+<section class="scene" id="scene-letter" aria-label="Scene 7: A heartfelt letter">
+  <div class="letter-sheet glass" id="letter-sheet">
+    <p class="letter-greeting" id="letter-greeting"></p>
+    <p class="letter-body" id="letter-body"><span class="letter-caret">&nbsp;</span></p>
+    <p class="letter-sign" id="letter-sign"></p>
+  </div>
+  <button class="btn" id="letter-continue" type="button" style="display:none;">Continue</button>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCENE 8 — A MESSAGE FROM ME (video)
+     ══════════════════════════════════════════════════════════════ -->
+<section class="scene" id="scene-video" aria-label="Scene 8: A message from me">
+  <p class="scene-eyebrow">One more thing</p>
+  <h2 class="display" id="video-title"></h2>
+  <div class="video-frame glass" id="video-frame">
+    <video id="story-video" playsinline preload="none"></video>
+    <div class="video-placeholder" id="video-placeholder">
+      <span class="video-placeholder-icon">🎬</span>
+      <p>Add your video file in <code>STORY.video.src</code> and it will play right here.</p>
+    </div>
+    <button class="video-play-btn" id="video-play-btn" type="button" aria-label="Play video message">
+      <span class="video-play-icon">&#9658;</span>
+    </button>
+  </div>
+  <button class="btn" id="video-continue" type="button" style="display:none;">Continue</button>
+  <button class="btn ghost" id="video-replay" type="button" style="display:none;">Watch Again</button>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCENE 9 — FINAL SURPRISE
+     ══════════════════════════════════════════════════════════════ -->
+<section class="scene" id="scene-finale" aria-label="Scene 9: Final surprise">
+  <p class="line" data-line="1" id="finale-1"></p>
+  <p class="line" data-line="2" id="finale-2"></p>
+  <p class="line" data-line="3" id="finale-3"></p>
+  <h1 class="line display" data-line="4" id="finale-4" style="font-size:clamp(2rem,6vw,3.4rem); color:var(--gold-soft);"></h1>
+  <button class="btn ghost" id="restart-btn" type="button" style="display:none;">Watch Again</button>
+
+  <div class="reply-box glass" id="reply-box" style="display:none;">
+    <p class="reply-prompt" id="reply-prompt">Write something back?</p>
+    <textarea class="reply-input" id="reply-input" rows="3" placeholder="Say whatever you want..." aria-label="Write a reply"></textarea>
+    <button class="btn ghost" id="reply-send" type="button">Send it back</button>
+  </div>
+</section>
+
+
+<script src="script.js" defer></script>
+
+</body>
+</html>
