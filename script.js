@@ -112,7 +112,7 @@ const STORY = {
 
   // Background music. Leave src empty to keep the player silent/disabled.
   music: {
-    src: "audio/Sr.mp3",
+    src: "audio/SR.mp3",
     title: "Soft Piano (placeholder)",
   },
 };
